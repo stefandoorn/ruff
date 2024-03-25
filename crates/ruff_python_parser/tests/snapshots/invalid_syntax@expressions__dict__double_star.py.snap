@@ -1,0 +1,74 @@
+---
+source: crates/ruff_python_parser/tests/fixtures.rs
+input_file: crates/ruff_python_parser/resources/invalid/expressions/dict/double_star.py
+---
+## AST
+
+```
+Module(
+    ModModule {
+        range: 0..318,
+        body: [
+            Expr(
+                StmtExpr {
+                    range: 125..135,
+                    value: Dict(
+                        ExprDict {
+                            range: 125..135,
+                            keys: [
+                                None,
+                                Some(
+                                    NumberLiteral(
+                                        ExprNumberLiteral {
+                                            range: 133..134,
+                                            value: Int(
+                                                1,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ],
+                            values: [
+                                Name(
+                                    ExprName {
+                                        range: 128..129,
+                                        id: "x",
+                                        ctx: Load,
+                                    },
+                                ),
+                                Name(
+                                    ExprName {
+                                        range: 134..134,
+                                        id: "",
+                                        ctx: Invalid,
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+        ],
+    },
+)
+```
+## Errors
+
+  |
+2 | # the ones which are higher than that.
+3 | 
+4 | {**x := 1}
+  |      ^^ Syntax Error: expected Comma, found ColonEqual
+5 | 
+6 | # TODO(dhruvmanila): Uncomment once the precedence is fixed
+  |
+
+
+  |
+2 | # the ones which are higher than that.
+3 | 
+4 | {**x := 1}
+  |          ^ Syntax Error: expected Colon, found Rbrace
+5 | 
+6 | # TODO(dhruvmanila): Uncomment once the precedence is fixed
+  |

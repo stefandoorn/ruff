@@ -1,0 +1,113 @@
+---
+source: crates/ruff_python_parser/tests/fixtures.rs
+input_file: crates/ruff_python_parser/resources/invalid/expressions/dict/named_expression_0.py
+---
+## AST
+
+```
+Module(
+    ModModule {
+        range: 0..79,
+        body: [
+            Expr(
+                StmtExpr {
+                    range: 55..72,
+                    value: Dict(
+                        ExprDict {
+                            range: 55..72,
+                            keys: [
+                                Some(
+                                    Name(
+                                        ExprName {
+                                            range: 56..57,
+                                            id: "x",
+                                            ctx: Load,
+                                        },
+                                    ),
+                                ),
+                                Some(
+                                    Name(
+                                        ExprName {
+                                            range: 62..63,
+                                            id: "z",
+                                            ctx: Load,
+                                        },
+                                    ),
+                                ),
+                                Some(
+                                    NumberLiteral(
+                                        ExprNumberLiteral {
+                                            range: 67..68,
+                                            value: Int(
+                                                2,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ],
+                            values: [
+                                Name(
+                                    ExprName {
+                                        range: 59..60,
+                                        id: "y",
+                                        ctx: Load,
+                                    },
+                                ),
+                                Name(
+                                    ExprName {
+                                        range: 63..63,
+                                        id: "",
+                                        ctx: Invalid,
+                                    },
+                                ),
+                                Name(
+                                    ExprName {
+                                        range: 70..71,
+                                        id: "a",
+                                        ctx: Load,
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Expr(
+                StmtExpr {
+                    range: 74..79,
+                    value: BinOp(
+                        ExprBinOp {
+                            range: 74..79,
+                            left: Name(
+                                ExprName {
+                                    range: 74..75,
+                                    id: "x",
+                                    ctx: Load,
+                                },
+                            ),
+                            op: Add,
+                            right: Name(
+                                ExprName {
+                                    range: 78..79,
+                                    id: "y",
+                                    ctx: Load,
+                                },
+                            ),
+                        },
+                    ),
+                },
+            ),
+        ],
+    },
+)
+```
+## Errors
+
+  |
+1 | # Unparenthesized named expression not allowed in key
+2 | 
+3 | {x: y, z := 2: a}
+  |          ^^ Syntax Error: expected Colon, found ColonEqual
+4 | 
+5 | x + y
+  |

@@ -1211,7 +1211,8 @@ impl<'src> Parser<'src> {
         }
 
         if self.eat(TokenKind::DoubleStar) {
-            // Handle dict unpack
+            // Handle dictionary unpacking
+            // TODO(dhruvmanila): Double star rule only allows a subset of expressions
             let value = self.parse_conditional_expression_or_higher();
             return Expr::Dict(self.parse_dictionary_expression(None, value.expr, start));
         }
@@ -1411,6 +1412,7 @@ impl<'src> Parser<'src> {
 
         self.parse_comma_separated_list(RecoveryContextKind::DictElements, |parser| {
             if parser.eat(TokenKind::DoubleStar) {
+                // TODO(dhruvmanila): Double star rule only allows a subset of expressions
                 keys.push(None);
             } else {
                 keys.push(Some(parser.parse_conditional_expression_or_higher().expr));

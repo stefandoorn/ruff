@@ -1,0 +1,123 @@
+---
+source: crates/ruff_python_parser/tests/fixtures.rs
+input_file: crates/ruff_python_parser/resources/invalid/expressions/dict/named_expression_1.py
+---
+## AST
+
+```
+Module(
+    ModModule {
+        range: 0..82,
+        body: [
+            Expr(
+                StmtExpr {
+                    range: 57..74,
+                    value: Dict(
+                        ExprDict {
+                            range: 57..74,
+                            keys: [
+                                Some(
+                                    Name(
+                                        ExprName {
+                                            range: 58..59,
+                                            id: "x",
+                                            ctx: Load,
+                                        },
+                                    ),
+                                ),
+                                Some(
+                                    Name(
+                                        ExprName {
+                                            range: 64..65,
+                                            id: "z",
+                                            ctx: Load,
+                                        },
+                                    ),
+                                ),
+                                Some(
+                                    NumberLiteral(
+                                        ExprNumberLiteral {
+                                            range: 72..73,
+                                            value: Int(
+                                                2,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ],
+                            values: [
+                                Name(
+                                    ExprName {
+                                        range: 61..62,
+                                        id: "y",
+                                        ctx: Load,
+                                    },
+                                ),
+                                Name(
+                                    ExprName {
+                                        range: 67..68,
+                                        id: "a",
+                                        ctx: Load,
+                                    },
+                                ),
+                                Name(
+                                    ExprName {
+                                        range: 73..73,
+                                        id: "",
+                                        ctx: Invalid,
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Expr(
+                StmtExpr {
+                    range: 76..81,
+                    value: BinOp(
+                        ExprBinOp {
+                            range: 76..81,
+                            left: Name(
+                                ExprName {
+                                    range: 76..77,
+                                    id: "x",
+                                    ctx: Load,
+                                },
+                            ),
+                            op: Add,
+                            right: Name(
+                                ExprName {
+                                    range: 80..81,
+                                    id: "y",
+                                    ctx: Load,
+                                },
+                            ),
+                        },
+                    ),
+                },
+            ),
+        ],
+    },
+)
+```
+## Errors
+
+  |
+1 | # Unparenthesized named expression not allowed in value
+2 | 
+3 | {x: y, z: a := 2}
+  |             ^^ Syntax Error: expected Comma, found ColonEqual
+4 | 
+5 | x + y
+  |
+
+
+  |
+1 | # Unparenthesized named expression not allowed in value
+2 | 
+3 | {x: y, z: a := 2}
+  |                 ^ Syntax Error: expected Colon, found Rbrace
+4 | 
+5 | x + y
+  |
